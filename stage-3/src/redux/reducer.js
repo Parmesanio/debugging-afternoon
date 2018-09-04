@@ -9,7 +9,8 @@ const GET_ALL_PRODUCTS_FULFILLED = "GET_ALL_PRODUCTS_FULFILLED";
 
 let initialState = {
     products: [],
-    shoppingCart: []
+    shoppingCart: [],
+    loading: false
 }
 
 // Reducer
@@ -19,17 +20,17 @@ export default function reducer(state=initialState, action) {
             return Object.assign({}, state, {loading: true});
 
         case GET_ALL_PRODUCTS_FULFILLED:
-            return Object.assign({}, state, {loading: false, products: action.payload})
-
+            return {...state, products: action.payload, loading: false}
         case ADD_TO_SHOPPING_CART:
             return Object.assign({}, state, {shoppingCart: [...state.shoppingCart, action.payload]});
 
         case REMOVE_FROM_SHOPPING_CART:
             let newArray = state.shoppingCart.slice();
-            newArray.splice(action.index, 1);
-            return Object.assign({}, {shoppingCart: newArray});
+            console.log('newArray', newArray);
             
-        defualt:
+            newArray.splice(action.payload, 1);
+            return Object.assign({}, state, {shoppingCart: newArray});
+        default:
             return state;
     }
 }
@@ -49,7 +50,7 @@ export function removeFromShoppingCart(productIndex) {
     }
 }
 
-export function getAllProducts(products) {
+export function getAllProducts() {
     return {
         type: GET_ALL_PRODUCTS,
         payload: productsController.getAllProducts()
